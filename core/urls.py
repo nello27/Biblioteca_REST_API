@@ -27,6 +27,12 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )   
 
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
+
 # Vista rápida temporal para forzar la creación del usuario desde la web
 def crear_admin_produccion(request):
     try:
@@ -41,6 +47,11 @@ def crear_admin_produccion(request):
 urlpatterns = [
     # CORREGIDO: Cambiar admin.site.split por admin.site.urls
     path('admin/', admin.site.urls), 
+    
+    
+    # 🔗 RUTA TEMPORAL SECRETA PARA CREAR TU USUARIO
+    path('crear-mi-admin-secreto/', crear_admin_produccion),
+    
     
     # Endpoints de nuestra App
     path('api/v1/', include('biblioteca.urls')),
