@@ -29,6 +29,8 @@ env = environ.Env(
 # 3. Leemos el archivo .env desde la raíz del proyecto
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
+# core/settings.py
+
 # ==========================================
 # CONFIGURACIONES DE ENTORNO (PRODUCCIÓN / LOCAL)
 # ==========================================
@@ -37,18 +39,14 @@ SECRET_KEY = env('SECRET_KEY', default='django-insecure-7ydfe!tw)0i#q5ntb$qldct=
 
 DEBUG = env('DEBUG')
 
-# Si DEBUG es True (Local), usamos el .env. Si es False (Render), usamos la lista fija o el comodín.
-if DEBUG:
-    allowed_hosts_raw = env('ALLOWED_HOSTS', default='127.0.0.1,localhost')
-    ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_raw.split(',') if host]
-else:
-    # En producción aceptamos la URL de Render o el comodín de forma segura
-    ALLOWED_HOSTS = [
-        'biblioteca-api-nello.onrender.com',
-        'localhost',
-        '127.0.0.1'
-    ]
-
+# Agregamos TODAS las opciones juntas directamente en la lista.
+# Así funcionará en tu computadora local y en Render al mismo tiempo sin depender de nada más.
+ALLOWED_HOSTS = [
+    'biblioteca-api-nello.onrender.com',
+    '127.0.0.1',
+    'localhost',
+    '*'  # El comodín definitivo por si Render usa proxies internos
+]
 # ==========================================
 # CONFIGURACIONES EXTRAÍDAS DEL .ENV
 # ==========================================
