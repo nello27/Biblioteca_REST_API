@@ -29,7 +29,6 @@ env = environ.Env(
 # 3. Leemos el archivo .env desde la raíz del proyecto
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-# core/settings.py
 
 # ==========================================
 # CONFIGURACIONES DE ENTORNO (PRODUCCIÓN / LOCAL)
@@ -39,36 +38,13 @@ SECRET_KEY = env('SECRET_KEY', default='django-insecure-7ydfe!tw)0i#q5ntb$qldct=
 
 DEBUG = env('DEBUG')
 
-# Agregamos TODAS las opciones juntas directamente en la lista.
-# Así funcionará en tu computadora local y en Render al mismo tiempo sin depender de nada más.
+# Lista única y global. Funciona en local y en Render simultáneamente sin pisarse.
 ALLOWED_HOSTS = [
     'biblioteca-api-nello.onrender.com',
     '127.0.0.1',
     'localhost',
-    '*'  # El comodín definitivo por si Render usa proxies internos
+    '*'  # Comodín definitivo para asegurar la respuesta tras proxies inversos
 ]
-# ==========================================
-# CONFIGURACIONES EXTRAÍDAS DEL .ENV
-# ==========================================
-
-# 4. Reemplazamos los valores planos por las variables del entorno
-SECRET_KEY = env('SECRET_KEY')
-
-DEBUG = env('DEBUG')
-
-# 1. Leemos el valor como texto plano (String) del entorno
-allowed_hosts_raw = env('ALLOWED_HOSTS', default='127.0.0.1,localhost')
-
-# 2. Lo dividimos dinámicamente por comas y limpiamos espacios fantasmas
-ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_raw.split(',') if host]
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7ydfe!tw)0i#q5ntb$qldct=r38)k)=xs&4-71xr=l3&3wxyq!'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
