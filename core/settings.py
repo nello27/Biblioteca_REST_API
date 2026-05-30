@@ -23,12 +23,31 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 2. Inicializamos environ
 env = environ.Env(
-    # Definimos tipos por defecto si no existen en el .env
     DEBUG=(bool, False)
 )
 
 # 3. Leemos el archivo .env desde la raíz del proyecto
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+# ==========================================
+# CONFIGURACIONES DE ENTORNO (PRODUCCIÓN / LOCAL)
+# ==========================================
+
+SECRET_KEY = env('SECRET_KEY', default='django-insecure-7ydfe!tw)0i#q5ntb$qldct=r38)k)=xs&4-71xr=l3&3wxyq!')
+
+DEBUG = env('DEBUG')
+
+# Si DEBUG es True (Local), usamos el .env. Si es False (Render), usamos la lista fija o el comodín.
+if DEBUG:
+    allowed_hosts_raw = env('ALLOWED_HOSTS', default='127.0.0.1,localhost')
+    ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_raw.split(',') if host]
+else:
+    # En producción aceptamos la URL de Render o el comodín de forma segura
+    ALLOWED_HOSTS = [
+        'biblioteca-api-nello.onrender.com',
+        'localhost',
+        '127.0.0.1'
+    ]
 
 # ==========================================
 # CONFIGURACIONES EXTRAÍDAS DEL .ENV
