@@ -18,6 +18,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
+from django.contrib.auth import get_user_model
+from django.http import HttpResponse
 
 # Importamos las vistas nativas de Simple JWT
 from rest_framework_simplejwt.views import (
@@ -25,6 +27,17 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )   
 
+# Vista rápida temporal para forzar la creación del usuario desde la web
+def crear_admin_produccion(request):
+    try:
+        User = get_user_model()
+        if not User.objects.filter(username='admin').exists():
+            User.objects.create_superuser('admin', 'admin@correo.com', 'AdminPrueba2026*')
+            return HttpResponse("🚀 ¡Superusuario 'admin' creado con éxito en Render!")
+        return HttpResponse("⚠️ El usuario 'admin' ya existe en la base de datos.")
+    except Exception as e:
+        return HttpResponse(f"❌ Error al crear el usuario: {e}")
+    
 urlpatterns = [
     # CORREGIDO: Cambiar admin.site.split por admin.site.urls
     path('admin/', admin.site.urls), 
