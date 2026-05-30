@@ -165,3 +165,16 @@ SPECTACULAR_SETTINGS = {
     'COMPONENT_SPLIT_REQUEST': True,
     'SECURITY': [{'JWT': []}],
 }
+
+# ==========================================
+# CREACIÓN AUTOMÁTICA TEMPORAL DEL ADMINISTRADOR
+# ==========================================
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    if not User.objects.filter(username='admin').exists():
+        User.objects.create_superuser('admin', 'admin@correo.com', 'AdminPrueba2026*')
+        print("¡Superusuario 'admin' creado con éxito en producción!")
+except Exception as e:
+    print(f"Error al intentar crear el superusuario: {e}")
+# ==========================================
